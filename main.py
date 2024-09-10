@@ -4,9 +4,13 @@ import time
 
 # pygame setup
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((1280, 720))
 title = pygame.display.set_caption(title="Test", icontitle="None")
 clock = pygame.time.Clock()
+background = pygame.image.load('assets/OIP.png')
+pygame.mixer.music.load('assets/music.mp3')
+pygame.mixer.music.play()
 running = True
 
 while running:
@@ -17,7 +21,7 @@ while running:
             running = False
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    screen.blit(background, (0, 0))
 
     # RENDER YOUR GAME HERE
 
