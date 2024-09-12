@@ -1,0 +1,13 @@
+nom;pv;atk1;titreatk1;descatk1;atk2;titreatk2;descatk2;elt;soinatk1;soinatk2;
+;20;5;;;1;;Defense (pour l'equipe);Eau;0;0;
+;15;7;;Brulure;4;;;Feu;0;0;pour attaque 2 : ennemi peut pas jouer
+;10;9;;50% de chance de réussite;6;;;Elec;0;1;
+;5;0;;90% de chance de bloquer les attaques pendant 5 tours;4;;;Terre;0;0;pour attaque 2 : temps de chargement
+;15;0;;Augmente les degats d'équipe de 2 pnd 3 tours;5;;50% de chance de coup critique;Herbe;0;0;
+;30;8;;Sacrifie 10 pv;2;;Reduction de 1 les attaques adverses;Eau;0;0;
+;20;0;;Soin 10 pv;4;;soin -1 + 30% de chance de passer tour ennemi + 30% de passer son propre tour;Terre;0;0;pour attaque 1 : 1pv d'attaque en moins pour lui pour une attaque ennemi
+;10;0;;Invoque un bouclier, 80% de chance de renvoyer l'attaque pnd 1 tour;3;;Soin de 5 un allier de choix;Herbe;1;0;
+;15;25% de l'ennemi;;Reduction pv adversaire de 50%;5;;Mort de soi-même;Feu;0;0;
+;15;2;;Ennemi rate ses attaque de 60%;4;;40% de chance d'en faire 8;Elec;0;2;
+;10;99;;50% de mort ou 50% de tuer l'ennemi;5;;Inflige 2 dégats à l'ennemi en cas d'attaque de sa part;Feu;0;0;
+Mur;50;0;;Protection;0;;;;0;0;
