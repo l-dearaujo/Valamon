@@ -1,5 +1,6 @@
 import pygame
 import csv
+import random
 
 from pygame.display import toggle_fullscreen
 
@@ -13,7 +14,7 @@ running = True
 princip_color = (128,0,0)
 startscreen = True
 screen_type = "home"
-data_list = []
+valamons = []
 
 while running:
     # poll for events
@@ -95,13 +96,13 @@ while running:
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
         if startscreen == False :
-            global data_list
-            data_list = read_csv_to_list('assets/valamons.csv')
+            global valamons
+            valamons = read_csv_to_list('assets/valamons.csv')
             class Valamons :
-                def __init__(self,nom,pv,atk1,titreatk1,atk2,titreatk2,elt,soin1,soin2):
+                def __init__(self,nom,pv,atk1,atk2,elt,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
                     self.nom = nom
                     self.pv = pv
-                    self.pvmax = pv
+                    self.pvmax = self.pv
                     self.atk1 = atk1
                     self.titre1 = titreatk1
                     self.atk2 = atk2
@@ -109,19 +110,45 @@ while running:
                     self.elt = elt
                     self.__soin1 = soin1
                     self.__soin2 = soin2
+                    self.__soincol1 = soincol1
+                    self.__soincol2 = soincol2
 
                 def __sub__(self,valeur):
                     self.pv -= valeur
 
-                def attaque(self,poke, atk):
-                    if atk == self.titre1 :
-                        poke.pv - self.atk1
+                def attaque1(self,vala, player):
+                    vala - self.atk1
+                    if self.__soincol1 == 0 :
                         if not self.pv + self.__soin1 > self.pvmax:
                             self.pv += self.__soin1
                     else:
-                        poke.pv - self.atk2
-                        if not self.pv + self.__soin1 > self.pvmax:
+                        for i in range(len(player.liste)) :
+                            if player.liste[i].pv + self.__soin1 <= player.liste[i].pvmax:
+                                player.liste[i].pv += self.__soin1
+
+                def attaque2(self, vala, player):
+                    vala - self.atk2
+                    if self.__soincol2 == 0:
+                        if not self.pv + self.__soin2 > self.pvmax:
                             self.pv += self.__soin2
+                    else:
+                        for i in range(len(player.liste)):
+                            if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
+                                player.liste[i].pv += self.__soin2
+
+            class Joueur :
+                def __init__(self,name):
+                    self.name = name
+                    self.liste = []
+                def initialisation(self):
+                    for i in range(8):
+                        ran = random.randint(0, 17)
+                        self.liste.append(valamons[ran])
+                def possecarte(self, vala, position):
+                    valaimage = pygame.image.load(f'assets/{vala}.png')
+                    screen.blit(valaimage, position)
+
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
             if is_text_clicked(mouse_x, mouse_y, home_rect):
