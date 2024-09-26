@@ -98,6 +98,8 @@ while running:
         if startscreen == False :
             global valamons
             valamons = read_csv_to_list('assets/valamons.csv')
+            print(valamons)
+            valamonslist = []
             class Valamons :
                 def __init__(self,nom,pv,atk1,atk2,elt,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
                     self.nom = nom
@@ -136,11 +138,25 @@ while running:
                             if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
                                 player.liste[i].pv += self.__soin2
 
+            for i in range(len(valamons)):
+                valamons[i][0] = Valamons(valamons[i][0],int(valamons[i][1]),int(valamons[i][2]),int(valamons[i][3]),int(valamons[i][4]),int(valamons[i][5]), int(valamons[i][6]), int(valamons[i][7]), int(valamons[i][8]),valamons[i][9],valamons[i][10])
+                valamonslist.append(valamons[i][0])
+            print(valamonslist)
+
             class Joueur :
                 def __init__(self,name):
                     self.name = name
                     self.liste = []
-                def initialisation(self):
+                    for i in range(8):
+                        ran = random.randint(0, 17)
+                        self.liste.append(valamons[ran])
+                def possecarte(self, vala, position):
+                    valaimage = pygame.image.load(f'assets/{vala}.png')
+                    screen.blit(valaimage, position)
+
+            class Bot :
+                def __init__(self):
+                    self.liste = []
                     for i in range(8):
                         ran = random.randint(0, 17)
                         self.liste.append(valamons[ran])
