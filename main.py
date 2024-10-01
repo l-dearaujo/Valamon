@@ -97,8 +97,9 @@ while running:
                     startscreen = False
         if startscreen == False :
             global valamons
-            valamons = read_csv_to_list('assets/valamons.csv')
-            print(valamons)
+            valamons = read_csv_to_list('assets/Valamons.csv')
+            valamonsl = [','.join(element[0].split(';')) for element in valamons]
+            print(valamonsl)
             valamonslist = []
             class Valamons :
                 def __init__(self,nom,pv,atk1,atk2,elt,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
@@ -138,9 +139,9 @@ while running:
                             if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
                                 player.liste[i].pv += self.__soin2
 
-            for i in range(len(valamons)):
-                valamons[i][0] = Valamons(valamons[i][0],int(valamons[i][1]),int(valamons[i][2]),int(valamons[i][3]),int(valamons[i][4]),int(valamons[i][5]), int(valamons[i][6]), int(valamons[i][7]), int(valamons[i][8]),valamons[i][9],valamons[i][10])
-                valamonslist.append(valamons[i][0])
+            for i in range(len(valamonsl)):
+                valamonsl[i][0] = Valamons(valamonsl[i][0],int(valamonsl[i][1]),int(valamonsl[i][2]),int(valamonsl[i][3]),int(valamonsl[i][4]),int(valamonsl[i][5]), int(valamonsl[i][6]), int(valamonsl[i][7]), int(valamonsl[i][8]),valamonsl[i][9],valamonsl[i][10])
+                valamonslist.append(valamonsl[i][0])
             print(valamonslist)
 
             class Joueur :
