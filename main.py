@@ -1,3 +1,5 @@
+from asyncio import wait_for
+
 import pygame
 import csv
 import random
@@ -15,6 +17,7 @@ princip_color = (128,0,0)
 startscreen = True
 screen_type = "home"
 valamons = []
+Bob = ""
 
 while running:
     # poll for events
@@ -34,8 +37,8 @@ while running:
 
     def read_csv_to_list(filename):
         liste = []
-        with open(filename, mode='r', newline='', encoding='utf-8') as file:
-            reader = csv.reader(file)
+        with open(filename, mode='r', newline='', encoding='ansi') as file:
+            reader = csv.reader(file, delimiter=';')
             for lines in reader:
                 liste.append(lines)
         return liste
@@ -97,12 +100,11 @@ while running:
                     startscreen = False
         if startscreen == False :
             global valamons
-            valamons = read_csv_to_list('assets/Valamons.csv')
-            valamonsl = [','.join(element[0].split(';')) for element in valamons]
-            print(valamonsl)
+            valamons = read_csv_to_list('assets/valamons.csv')
+            valamonsl = [element for element in valamons]
             valamonslist = []
             class Valamons :
-                def __init__(self,nom,pv,atk1,atk2,elt,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
+                def __init__(self,nom,pv,atk1,atk2,elt1,elt2,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
                     self.nom = nom
                     self.pv = pv
                     self.pvmax = self.pv
@@ -110,7 +112,8 @@ while running:
                     self.titre1 = titreatk1
                     self.atk2 = atk2
                     self.titre2 = titreatk2
-                    self.elt = elt
+                    self.elt1 = elt1
+                    self.elt2 = elt2
                     self.__soin1 = soin1
                     self.__soin2 = soin2
                     self.__soincol1 = soincol1
@@ -140,31 +143,23 @@ while running:
                                 player.liste[i].pv += self.__soin2
 
             for i in range(len(valamonsl)):
-                valamonsl[i][0] = Valamons(valamonsl[i][0],int(valamonsl[i][1]),int(valamonsl[i][2]),int(valamonsl[i][3]),int(valamonsl[i][4]),int(valamonsl[i][5]), int(valamonsl[i][6]), int(valamonsl[i][7]), int(valamonsl[i][8]),valamonsl[i][9],valamonsl[i][10])
+                valamonsl[i][0] = valamonsl[i][0].strip('"')
+                valamonsl[i][0] = Valamons(valamonsl[i][0],int(valamonsl[i][1]),int(valamonsl[i][2]),int(valamonsl[i][3]),int(valamonsl[i][4]),int(valamonsl[i][5]),int(valamonsl[i][6]), int(valamonsl[i][7]), int(valamonsl[i][8]), valamonsl[i][9],valamonsl[i][10],valamonsl[i][11])
                 valamonslist.append(valamonsl[i][0])
-            print(valamonslist)
 
             class Joueur :
-                def __init__(self,name):
-                    self.name = name
-                    self.liste = []
-                    for i in range(8):
-                        ran = random.randint(0, 17)
-                        self.liste.append(valamons[ran])
-                def possecarte(self, vala, position):
-                    valaimage = pygame.image.load(f'assets/{vala}.png')
-                    screen.blit(valaimage, position)
-
-            class Bot :
                 def __init__(self):
                     self.liste = []
                     for i in range(8):
-                        ran = random.randint(0, 17)
-                        self.liste.append(valamons[ran])
+                        ran = random.randint(0, 20)
+                        self.liste.append(valamonslist[ran])
                 def possecarte(self, vala, position):
                     valaimage = pygame.image.load(f'assets/{vala}.png')
                     screen.blit(valaimage, position)
 
+            J1 = Joueur()
+            BOT = Joueur()
+            print(J1.liste[0].pv)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos

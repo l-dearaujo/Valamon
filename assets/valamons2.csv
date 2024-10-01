@@ -2,7 +2,7 @@ Bob;20;22;3;0;1;0;0;1;Plante;;Gifle;Encouragement
 Arbre Moe-Joe;15;17;0;3;0;0;1;0;Plante;;Boost ;Racine
 Plante Carnivore;15;17;3;3;3;0;0;0;Plante;;Morsure;Piege
 TG;10;12;5;3;0;1;0;0;Eau;;Chataigne;Aveuglement
-Jean-Michel;20;22;5;1;-10;0;0;0;Eau;;Sacrifice;Préparation
+Jean-Michel;20;22;5;1;-10;0;0;0;Eau;;Sacrifice;PrÃ©paration
 HGF;10;12;0;2;1;0;1;0;Eau;;Bouclier Reflecteur;Incantation
 Ronald Mcdonald;15;17;2;3;0;0;0;0;Feu;;Burger;Machine de glace
 Cerbere;15;17;0;3;4;0;1;0;Feu;;Effrayement;Griffure
@@ -16,6 +16,6 @@ Donald Krump;10;12;0;5;0;0;1;0;Lumiere;;Grand Mur;Headshot
 Lunar;4;5;0;3;0;0;0;0;Robot ;;Armure ;Tir Charge
 Glitch;15;17;6;3;0;-15;0;0;Robot;;Piratage;/SHUTDOWN
 Mr. Henry;20;22;4;8;0;-25;0;0;Robot ;;Hacks;Ragequit
-Misu;12;14;2;4;0;0;0;0;Eau;Bonbons;Bulles;Barbe à papa
-rg;15;17;0;3;0;0;0;0;Feu;Robot;Pare-Feu;Fonte
-dthf;12;14;1;0;0;4;0;0;Plante;Lumiere;Photosynthèse;Engrais
+Misu;12;14;2;4;0;0;0;0;Eau;Bonbons;Bulles;Barbe Ã  papa
+;15;17;0;3;0;0;0;0;Feu;Robot;Pare-Feu;Fonte
+;12;14;1;0;0;4;0;0;Plante;Lumiere;PhotosynthÃ¨se;Engrais
