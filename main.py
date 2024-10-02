@@ -17,7 +17,94 @@ princip_color = (128,0,0)
 startscreen = True
 screen_type = "home"
 valamons = []
-Bob = ""
+pos_emplacement1 = [[[215,215],[315,215]],[[215,320],[315,320]]]
+
+
+def is_text_clicked(x, y, text_rect):
+    return text_rect.collidepoint(x, y)
+
+
+def read_csv_to_list(filename):
+    liste = []
+    with open(filename, mode='r', newline='', encoding='ansi') as file:
+        reader = csv.reader(file, delimiter=';')
+        for lines in reader:
+            liste.append(lines)
+    return liste
+
+def pos_cartes():
+    m = [["","","","","",""],["","","","","",""]]
+    for i in range(8):
+        lig = random.randint(0,1)
+        col = random.randint(0,4)
+        m[lig][col] = "X"
+    return m
+
+class Valamons:
+    def __init__(self, nom, pv, atk1, atk2, elt1, elt2, soin1, soin2, soincol1, soincol2, titreatk1, titreatk2):
+        self.nom = nom
+        self.pv = pv
+        self.pvmax = self.pv
+        self.atk1 = atk1
+        self.titre1 = titreatk1
+        self.atk2 = atk2
+        self.titre2 = titreatk2
+        self.elt1 = elt1
+        self.elt2 = elt2
+        self.__soin1 = soin1
+        self.__soin2 = soin2
+        self.__soincol1 = soincol1
+        self.__soincol2 = soincol2
+
+    def __sub__(self, valeur):
+        self.pv -= valeur
+
+    def attaque1(self, vala, player):
+        vala - self.atk1
+        if self.__soincol1 == 0:
+            if not self.pv + self.__soin1 > self.pvmax:
+                self.pv += self.__soin1
+        else:
+            for i in range(len(player.liste)):
+                if player.liste[i].pv + self.__soin1 <= player.liste[i].pvmax:
+                    player.liste[i].pv += self.__soin1
+
+    def attaque2(self, vala, player):
+        vala - self.atk2
+        if self.__soincol2 == 0:
+            if not self.pv + self.__soin2 > self.pvmax:
+                self.pv += self.__soin2
+        else:
+            for i in range(len(player.liste)):
+                if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
+                    player.liste[i].pv += self.__soin2
+
+class Joueur :
+    def __init__(self):
+        self.liste = []
+        for i in range(8):
+            ran = random.randint(0, 20)
+            self.liste.append(valamonslist[ran])
+    def possecarte(self, vala, position):
+        valaimage = pygame.image.load(f'assets/{vala}.png')
+        screen.blit(valaimage, position)
+
+
+valamons = read_csv_to_list('assets/valamons.csv')
+valamonsl = [element for element in valamons]
+valamonslist = []
+
+for i in range(len(valamonsl)):
+    valamonsl[i][0] = valamonsl[i][0].strip('"')
+    valamonsl[i][0] = Valamons(valamonsl[i][0], int(valamonsl[i][1]), int(valamonsl[i][2]), int(valamonsl[i][3]),
+                               int(valamonsl[i][4]), int(valamonsl[i][5]), int(valamonsl[i][6]), int(valamonsl[i][7]),
+                               int(valamonsl[i][8]), valamonsl[i][9], valamonsl[i][10], valamonsl[i][11])
+    valamonslist.append(valamonsl[i][0])
+
+J1 = Joueur()
+BOT = Joueur()
+plateauJ1 = pos_cartes()
+plateauBOT = pos_cartes()
 
 while running:
     # poll for events
@@ -32,23 +119,12 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
 
-    def is_text_clicked(x, y, text_rect):
-        return text_rect.collidepoint(x, y)
-
-    def read_csv_to_list(filename):
-        liste = []
-        with open(filename, mode='r', newline='', encoding='ansi') as file:
-            reader = csv.reader(file, delimiter=';')
-            for lines in reader:
-                liste.append(lines)
-        return liste
-
     def home_screen() :
         titre = pygame.font.SysFont('Arial', 150)
         titre_surface = titre.render("Valamons", False, princip_color)
         text = pygame.font.SysFont('Arial', 75)
         text_surface = text.render("-> Jouer Solo", False, princip_color)
-        text_surface1 = text.render("-> Jouer en Multijoueur", False, princip_color)
+        text_surface1 = text.render("-> Jouer en Multijoueur (Indisponible)", False, princip_color)
         text_surface2 = text.render("-> Crédits", False, princip_color)
         text_surface3 = text.render("-> Quitter", False, princip_color)
         titre_rect = titre_surface.get_rect(center=(860, 100))
@@ -99,67 +175,19 @@ while running:
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
         if startscreen == False :
-            global valamons
-            valamons = read_csv_to_list('assets/valamons.csv')
-            valamonsl = [element for element in valamons]
-            valamonslist = []
-            class Valamons :
-                def __init__(self,nom,pv,atk1,atk2,elt1,elt2,soin1,soin2,soincol1,soincol2,titreatk1,titreatk2):
-                    self.nom = nom
-                    self.pv = pv
-                    self.pvmax = self.pv
-                    self.atk1 = atk1
-                    self.titre1 = titreatk1
-                    self.atk2 = atk2
-                    self.titre2 = titreatk2
-                    self.elt1 = elt1
-                    self.elt2 = elt2
-                    self.__soin1 = soin1
-                    self.__soin2 = soin2
-                    self.__soincol1 = soincol1
-                    self.__soincol2 = soincol2
-
-                def __sub__(self,valeur):
-                    self.pv -= valeur
-
-                def attaque1(self,vala, player):
-                    vala - self.atk1
-                    if self.__soincol1 == 0 :
-                        if not self.pv + self.__soin1 > self.pvmax:
-                            self.pv += self.__soin1
-                    else:
-                        for i in range(len(player.liste)) :
-                            if player.liste[i].pv + self.__soin1 <= player.liste[i].pvmax:
-                                player.liste[i].pv += self.__soin1
-
-                def attaque2(self, vala, player):
-                    vala - self.atk2
-                    if self.__soincol2 == 0:
-                        if not self.pv + self.__soin2 > self.pvmax:
-                            self.pv += self.__soin2
-                    else:
-                        for i in range(len(player.liste)):
-                            if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
-                                player.liste[i].pv += self.__soin2
-
-            for i in range(len(valamonsl)):
-                valamonsl[i][0] = valamonsl[i][0].strip('"')
-                valamonsl[i][0] = Valamons(valamonsl[i][0],int(valamonsl[i][1]),int(valamonsl[i][2]),int(valamonsl[i][3]),int(valamonsl[i][4]),int(valamonsl[i][5]),int(valamonsl[i][6]), int(valamonsl[i][7]), int(valamonsl[i][8]), valamonsl[i][9],valamonsl[i][10],valamonsl[i][11])
-                valamonslist.append(valamonsl[i][0])
-
-            class Joueur :
-                def __init__(self):
-                    self.liste = []
-                    for i in range(8):
-                        ran = random.randint(0, 20)
-                        self.liste.append(valamonslist[ran])
-                def possecarte(self, vala, position):
-                    valaimage = pygame.image.load(f'assets/{vala}.png')
-                    screen.blit(valaimage, position)
-
-            J1 = Joueur()
-            BOT = Joueur()
+            for i in range(len(J1.liste)):
+                for a in range(2):
+                    for b in range(2):
+                        if plateauJ1[a][b] == "X":
+                            carte = pygame.image.load('assets/house-solid.svg')
+                            scaled_image = pygame.transform.scale(carte, (35, 35))
+                            pos_a = pos_emplacement1[a][b][0]
+                            pos_b = pos_emplacement1[a][b][1]
+                            carte_rect = scaled_image.get_rect(center=(pos_a, pos_b))
+                            screen.blit(scaled_image, carte_rect)
             print(J1.liste[0].pv)
+            print(plateauJ1)
+            print(plateauBOT)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
