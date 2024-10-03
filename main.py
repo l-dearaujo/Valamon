@@ -17,7 +17,8 @@ princip_color = (128,0,0)
 startscreen = True
 screen_type = "home"
 valamons = []
-pos_emplacement1 = [[[215,215],[315,215]],[[215,320],[315,320]]]
+pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,672],[732,672],[862,672],[992,672],[1122,672]]]
+pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
 
 
 def is_text_clicked(x, y, text_rect):
@@ -34,10 +35,13 @@ def read_csv_to_list(filename):
 
 def pos_cartes():
     m = [["","","","","",""],["","","","","",""]]
-    for i in range(8):
+    compteur_x = 0
+    while compteur_x<7:
         lig = random.randint(0,1)
         col = random.randint(0,4)
-        m[lig][col] = "X"
+        if m[lig][col]!= "X":
+            m[lig][col] = "X"
+            compteur_x+=1
     return m
 
 class Valamons:
@@ -156,7 +160,7 @@ while running:
         home = pygame.image.load('assets/house-solid.svg')
         scaled_image = pygame.transform.scale(home, (35, 35))
         home_rect = scaled_image.get_rect(topleft=(10, 10))
-        fond = pygame.image.load('assets/NSI_CARTES_test1x2.png')
+        fond = pygame.image.load('assets/plateau.png')
         screen.blit(fond, (0, 0))
         screen.blit(scaled_image, home_rect)
         global startscreen
@@ -177,20 +181,32 @@ while running:
         if startscreen == False :
             for i in range(len(J1.liste)):
                 for a in range(2):
-                    for b in range(2):
+                    for b in range(5):
                         if plateauJ1[a][b] == "X":
-                            carte = pygame.image.load('assets/house-solid.svg')
-                            scaled_image = pygame.transform.scale(carte, (35, 35))
+                            carte = pygame.image.load('assets/carte_test_R.png')
                             pos_a = pos_emplacement1[a][b][0]
                             pos_b = pos_emplacement1[a][b][1]
-                            carte_rect = scaled_image.get_rect(center=(pos_a, pos_b))
-                            screen.blit(scaled_image, carte_rect)
-            print(J1.liste[0].pv)
-            print(plateauJ1)
-            print(plateauBOT)
+                            carte_rect = carte.get_rect(center=(pos_a, pos_b))
+                            screen.blit(carte, carte_rect)
+            for i in range(len(BOT.liste)):
+                for a in range(2):
+                    for b in range(5):
+                        if plateauJ1[a][b] == "X":
+                            carte = pygame.image.load('assets/carte_test_R.png')
+                            pos_a = pos_emplacement2[a][b][0]
+                            pos_b = pos_emplacement2[a][b][1]
+                            carte_rect = carte.get_rect(center=(pos_a, pos_b))
+                            screen.blit(carte, carte_rect)
+            #print(J1.liste[0].pv)
+            #print(plateauJ1)
+            #print(plateauBOT)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
+            for a in range(2):
+                for b in range(6):
+                    if mouse_x == pos_emplacement1[a][b][0] and mouse_y == pos_emplacement1[a][b][1]:
+                        print("ok")
             if is_text_clicked(mouse_x, mouse_y, home_rect):
                 global screen_type
                 screen_type = 'home'
