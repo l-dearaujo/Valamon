@@ -13,7 +13,7 @@ title = pygame.display.set_caption(title="Valamons", icontitle="None")
 clock = pygame.time.Clock()
 pygame.font.init()
 running = True
-princip_color = (128,0,0)
+princip_color = (255,255,255)
 startscreen = True
 screen_type = "home"
 valamons = []
@@ -131,6 +131,9 @@ while running:
         text_surface1 = text.render("-> Jouer en Multijoueur (Indisponible)", False, princip_color)
         text_surface2 = text.render("-> Crédits", False, princip_color)
         text_surface3 = text.render("-> Quitter", False, princip_color)
+        fond = pygame.image.load('assets/home_screen.png')
+        fond_scaled = pygame.transform.scale(fond, (1728, 972))
+        screen.blit(fond_scaled, (0, 0))
         titre_rect = titre_surface.get_rect(center=(860, 100))
         text_rect = text_surface.get_rect(topleft=(570,325))
         text_rect1 = text_surface1.get_rect(topleft=(570,450))
@@ -157,6 +160,7 @@ while running:
                 return
 
     def solo() :
+        carte_rects_j1 = []
         home = pygame.image.load('assets/house-solid.svg')
         scaled_image = pygame.transform.scale(home, (35, 35))
         home_rect = scaled_image.get_rect(topleft=(10, 10))
@@ -179,15 +183,23 @@ while running:
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
         if startscreen == False :
+            compteur = 0
+            while compteur != 7:
+                for a in range(2):
+                    for b in range(5):
+                        if plateauJ1[a][b] == "X":
+                            compteur += 1
             for i in range(len(J1.liste)):
                 for a in range(2):
                     for b in range(5):
                         if plateauJ1[a][b] == "X":
+                            compteur = 0
                             carte = pygame.image.load('assets/carte_test_R.png')
                             pos_a = pos_emplacement1[a][b][0]
                             pos_b = pos_emplacement1[a][b][1]
                             carte_rect = carte.get_rect(center=(pos_a, pos_b))
                             screen.blit(carte, carte_rect)
+                            carte_rects_j1.append((carte_rect, a, b))
             for i in range(len(BOT.liste)):
                 for a in range(2):
                     for b in range(5):
@@ -197,16 +209,19 @@ while running:
                             pos_b = pos_emplacement2[a][b][1]
                             carte_rect = carte.get_rect(center=(pos_a, pos_b))
                             screen.blit(carte, carte_rect)
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = event.pos
+                for carte_rect, a, b in carte_rects_j1:
+                    if carte_rect.collidepoint(mouse_x, mouse_y):
+                        print(f"Carte J1 cliquée à la position : {a}, {b}")
+
             #print(J1.liste[0].pv)
             #print(plateauJ1)
             #print(plateauBOT)
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
-            for a in range(2):
-                for b in range(6):
-                    if mouse_x == pos_emplacement1[a][b][0] and mouse_y == pos_emplacement1[a][b][1]:
-                        print("ok")
             if is_text_clicked(mouse_x, mouse_y, home_rect):
                 global screen_type
                 screen_type = 'home'
