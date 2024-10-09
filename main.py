@@ -49,18 +49,18 @@ def pos_cartes():
     return m
 
 class Valamons:
-    def __init__(self, nom, pv, atk1, atk2, elt1, elt2, soin1, soin2, soincol1, soincol2, titreatk1, titreatk2):
+    def __init__(self, nom, pv, pvmax, atk1, atk2, soin1, soin2, soincol1, soincol2, elt1, elt2, titreatk1, titreatk2):
         self.nom = nom
         self.pv = pv
-        self.pvmax = self.pv
+        self.__pvmax = pvmax
         self.atk1 = atk1
         self.titre1 = titreatk1
         self.atk2 = atk2
         self.titre2 = titreatk2
         self.elt1 = elt1
         self.elt2 = elt2
-        self.__soin1 = soin1
-        self.__soin2 = soin2
+        self.soin1 = soin1
+        self.soin2 = soin2
         self.__soincol1 = soincol1
         self.__soincol2 = soincol2
 
@@ -106,7 +106,7 @@ for i in range(len(valamonsl)):
     valamonsl[i][0] = valamonsl[i][0].strip('"')
     valamonsl[i][0] = Valamons(valamonsl[i][0], int(valamonsl[i][1]), int(valamonsl[i][2]), int(valamonsl[i][3]),
                                int(valamonsl[i][4]), int(valamonsl[i][5]), int(valamonsl[i][6]), int(valamonsl[i][7]),
-                               int(valamonsl[i][8]), valamonsl[i][9], valamonsl[i][10], valamonsl[i][11])
+                               int(valamonsl[i][8]), valamonsl[i][9], valamonsl[i][10], valamonsl[i][11], valamonsl[i][12])
     valamonslist.append(valamonsl[i][0])
 
 J1 = Joueur()
@@ -124,24 +124,27 @@ def init_pos():
                 break
             for b in range(5):
                 if plateauJ1[a][b] == "X" and not placed:
-                    carte = pygame.image.load('assets/carte_test_R.png')
+                    carte = pygame.image.load(f'assets/carte_{J1.liste[i].nom}.png')
                     pos_a = pos_emplacement1[a][b][0]
                     pos_b = pos_emplacement1[a][b][1]
                     carte_rect = carte.get_rect(center=(pos_a, pos_b))
                     carte_rects_j1.append([carte_rect, pos_a, pos_b, i])
-                    print(J1.liste[i].nom)
+                    plateauJ1[a][b]="Y"
                     placed = True
     for i in range(len(BOT.liste)):
+        placed = False
         for a in range(2):
+            if placed :
+                break
             for b in range(5):
-                if plateauJ1[a][b] == "X":
-                    carte = pygame.image.load('assets/carte_test_R.png')
+                if plateauBOT[a][b] == "X" and not placed:
+                    carte = pygame.image.load(f'assets/carte_{BOT.liste[i].nom}.png')
                     pos_a = pos_emplacement2[a][b][0]
                     pos_b = pos_emplacement2[a][b][1]
                     carte_rect = carte.get_rect(center=(pos_a, pos_b))
                     carte_rects_j2.append([carte_rect, pos_a, pos_b, i])
-
-init_pos()
+                    plateauBOT[a][b]="Y"
+                    placed = True
 
 while running:
     # poll for events
@@ -193,6 +196,7 @@ while running:
                     print("Passage en mode Solo")
                     global screen_type
                     screen_type = "solo"
+                    init_pos()
                     return
                 if is_text_clicked(mouse_x, mouse_y, text_rect2):
                     print("Passage sur les crédits")
@@ -226,22 +230,11 @@ while running:
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
         elif startscreen == False :
-            for i in range(len(J1.liste)):
-                for a in range(2):
-                    for b in range(5):
-                        if plateauJ1[a][b] == "X":
-                            carte = pygame.image.load('assets/carte_test_R.png')
-                            pos_a = pos_emplacement1[a][b][0]
-                            pos_b = pos_emplacement1[a][b][1]
-                            carte_rect = carte.get_rect(center=(pos_a, pos_b))
-                            screen.blit(carte, carte_rect)
-                            print(J1.liste[i].nom)
-            """for carte_rect, pos_a, pos_b, i in carte_rects_j1:
-                carte = pygame.image.load('assets/carte_test_R.png')
+            for carte_rect, pos_a, pos_b, i in carte_rects_j1:
+                carte = pygame.image.load(f'assets/carte_{J1.liste[i].nom}.png')
                 screen.blit(carte, carte_rect)
-                print(J1.liste[i].nom)"""
             for carte_rect, pos_a, pos_b, i in carte_rects_j2:
-                carte = pygame.image.load('assets/carte_test_R.png')
+                carte = pygame.image.load(f'assets/carte_{BOT.liste[i].nom}.png')
                 screen.blit(carte, carte_rect)
 
             if pos_carte_selec != None:
@@ -277,17 +270,26 @@ while running:
                 scaled_image = pygame.transform.scale(xmark, (35, 45))
                 xmark_rect = scaled_image.get_rect(topleft=(1680, 10))
                 screen.blit(scaled_image, xmark_rect)
-                text = pygame.font.SysFont('Arial', 100)
+                text = pygame.font.SysFont('Arial', 90)
                 titre = pygame.font.SysFont('Arial', 125)
                 titre_surface = titre.render(f"{J1.liste[pos_carte_selec[2]].nom}", False, (255, 255, 255))
+                text_surface5 = text.render(f"Élément 1 : {J1.liste[pos_carte_selec[2]].elt1}", False, (255, 255, 255))
                 text_surface = text.render(f"Attaque 1 : {J1.liste[pos_carte_selec[2]].titre1}", False, (255, 255, 255))
-                text_surface2 = text.render(f"PV d'attaque 1 : {J1.liste[pos_carte_selec[2]].atk1}", False, (255, 255, 255))
+                text_surface2 = text.render(f"PV d'attaque 1 : {J1.liste[pos_carte_selec[2]].atk1} (Soin : {J1.liste[pos_carte_selec[2]].soin1})", False, (255, 255, 255))
+                text_surface3 = text.render(f"Attaque 2 : {J1.liste[pos_carte_selec[2]].titre2}", False, (255, 255, 255))
+                text_surface4 = text.render(f"PV d'attaque 2 : {J1.liste[pos_carte_selec[2]].atk2} (Soin : {J1.liste[pos_carte_selec[2]].soin2})", False, (255, 255, 255))
                 titre_rect=titre_surface.get_rect(center=(860,100))
                 screen.blit(titre_surface, titre_rect)
-                text_rect2=text_surface2.get_rect(center=(860,425))
+                text_rect2=text_surface2.get_rect(center=(860,565))
                 screen.blit(text_surface2, text_rect2)
-                text_rect=text_surface.get_rect(center=(860,325))
+                text_rect=text_surface.get_rect(center=(860,445))
                 screen.blit(text_surface, text_rect)
+                text_rect3=text_surface3.get_rect(center=(860,685))
+                screen.blit(text_surface3, text_rect3)
+                text_rect4=text_surface4.get_rect(center=(860,805))
+                screen.blit(text_surface4, text_rect4)
+                text_rect5=text_surface5.get_rect(center=(860,325))
+                screen.blit(text_surface5, text_rect5)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         mouse_x, mouse_y = event.pos
@@ -300,7 +302,6 @@ while running:
                     for carte_rect, a, b, i in carte_rects_j1:
                         if carte_rect.collidepoint(mouse_x, mouse_y):
                             pos_carte_selec = [a,b,i]
-                            print(i)
                             break
 
         if event.type == pygame.MOUSEBUTTONDOWN:
