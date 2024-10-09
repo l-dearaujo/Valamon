@@ -1,5 +1,3 @@
-from asyncio import wait_for
-
 import pygame
 import csv
 import random
@@ -16,14 +14,12 @@ running = True
 princip_color = (255,255,255)
 startscreen = True
 screen_type = "home"
-valamons = []
 pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,672],[732,672],[862,672],[992,672],[1122,672]]]
 pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
 carte_rects_j1 = []
 carte_rects_j2 = []
 pos_carte_selec = None
 prop_screen = False
-
 
 def is_text_clicked(x, y, text_rect):
     return text_rect.collidepoint(x, y)
@@ -70,22 +66,22 @@ class Valamons:
     def attaque1(self, vala, player):
         vala - self.atk1
         if self.__soincol1 == 0:
-            if not self.pv + self.__soin1 > self.pvmax:
-                self.pv += self.__soin1
+            if not self.pv + self.soin1 > self.__pvmax:
+                self.pv += self.soin1
         else:
             for i in range(len(player.liste)):
-                if player.liste[i].pv + self.__soin1 <= player.liste[i].pvmax:
-                    player.liste[i].pv += self.__soin1
+                if player.liste[i].pv + self.soin1 <= player.liste[i].pvmax:
+                    player.liste[i].pv += self.soin1
 
     def attaque2(self, vala, player):
         vala - self.atk2
         if self.__soincol2 == 0:
-            if not self.pv + self.__soin2 > self.pvmax:
-                self.pv += self.__soin2
+            if not self.pv + self.soin2 > self.__pvmax:
+                self.pv += self.soin2
         else:
             for i in range(len(player.liste)):
-                if player.liste[i].pv + self.__soin2 <= player.liste[i].pvmax:
-                    player.liste[i].pv += self.__soin2
+                if player.liste[i].pv + self.soin2 <= player.liste[i].pvmax:
+                    player.liste[i].pv += self.soin2
 
 class Joueur :
     def __init__(self):
