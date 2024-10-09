@@ -19,6 +19,10 @@ screen_type = "home"
 valamons = []
 pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,672],[732,672],[862,672],[992,672],[1122,672]]]
 pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
+carte_rects_j1 = []
+carte_rects_j2 = []
+pos_carte_selec = None
+prop_screen = False
 
 
 def is_text_clicked(x, y, text_rect):
@@ -110,6 +114,35 @@ BOT = Joueur()
 plateauJ1 = pos_cartes()
 plateauBOT = pos_cartes()
 
+def init_pos():
+    global carte_rects_j1
+    global carte_rects_j2
+    for i in range(len(J1.liste)):
+        placed = False
+        for a in range(2):
+            if placed :
+                break
+            for b in range(5):
+                if plateauJ1[a][b] == "X" and not placed:
+                    carte = pygame.image.load('assets/carte_test_R.png')
+                    pos_a = pos_emplacement1[a][b][0]
+                    pos_b = pos_emplacement1[a][b][1]
+                    carte_rect = carte.get_rect(center=(pos_a, pos_b))
+                    carte_rects_j1.append([carte_rect, pos_a, pos_b, i])
+                    print(J1.liste[i].nom)
+                    placed = True
+    for i in range(len(BOT.liste)):
+        for a in range(2):
+            for b in range(5):
+                if plateauJ1[a][b] == "X":
+                    carte = pygame.image.load('assets/carte_test_R.png')
+                    pos_a = pos_emplacement2[a][b][0]
+                    pos_b = pos_emplacement2[a][b][1]
+                    carte_rect = carte.get_rect(center=(pos_a, pos_b))
+                    carte_rects_j2.append([carte_rect, pos_a, pos_b, i])
+
+init_pos()
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -124,6 +157,8 @@ while running:
     screen.fill("white")
 
     def home_screen() :
+        global pos_carte_selec
+        pos_carte_selec = None
         titre = pygame.font.SysFont('Arial', 150)
         titre_surface = titre.render("Valamons", False, princip_color)
         text = pygame.font.SysFont('Arial', 75)
@@ -134,6 +169,10 @@ while running:
         fond = pygame.image.load('assets/home_screen.png')
         fond_scaled = pygame.transform.scale(fond, (1728, 972))
         screen.blit(fond_scaled, (0, 0))
+        voile = pygame.Surface((1728, 972))
+        voile.set_alpha(70)
+        voile.fill((0, 0, 0))
+        screen.blit(voile, (0, 0))
         titre_rect = titre_surface.get_rect(center=(860, 100))
         text_rect = text_surface.get_rect(topleft=(570,325))
         text_rect1 = text_surface1.get_rect(topleft=(570,450))
@@ -145,22 +184,25 @@ while running:
         screen.blit(text_surface2, text_rect2)
         screen.blit(text_surface3, text_rect3)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = event.pos
-            if is_text_clicked(mouse_x, mouse_y, text_rect3):
-                global running
-                running = False
-            if is_text_clicked(mouse_x, mouse_y, text_rect):
-                print("Passage en mode Solo")
-                global screen_type
-                screen_type = "solo"
-                return
-            if is_text_clicked(mouse_x, mouse_y, text_rect2):
-                print("Passage sur les crédits")
-                screen_type = "credit"
-                return
+            if event.button == 1:
+                mouse_x, mouse_y = event.pos
+                if is_text_clicked(mouse_x, mouse_y, text_rect3):
+                    global running
+                    running = False
+                if is_text_clicked(mouse_x, mouse_y, text_rect):
+                    print("Passage en mode Solo")
+                    global screen_type
+                    screen_type = "solo"
+                    return
+                if is_text_clicked(mouse_x, mouse_y, text_rect2):
+                    print("Passage sur les crédits")
+                    screen_type = "credit"
+                    return
 
     def solo() :
-        carte_rects_j1 = []
+        global carte_rects_j1
+        global carte_rects_j2
+        global pos_carte_selec
         home = pygame.image.load('assets/house-solid.svg')
         scaled_image = pygame.transform.scale(home, (35, 35))
         home_rect = scaled_image.get_rect(topleft=(10, 10))
@@ -168,6 +210,7 @@ while running:
         screen.blit(fond, (0, 0))
         screen.blit(scaled_image, home_rect)
         global startscreen
+        global prop_screen
         if startscreen == True :
             voile = pygame.Surface((1728, 972))
             voile.set_alpha(128)
@@ -182,50 +225,91 @@ while running:
                 mouse_x, mouse_y = event.pos
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
-        if startscreen == False :
-            compteur = 0
-            while compteur != 7:
-                for a in range(2):
-                    for b in range(5):
-                        if plateauJ1[a][b] == "X":
-                            compteur += 1
+        elif startscreen == False :
             for i in range(len(J1.liste)):
                 for a in range(2):
                     for b in range(5):
                         if plateauJ1[a][b] == "X":
-                            compteur = 0
                             carte = pygame.image.load('assets/carte_test_R.png')
                             pos_a = pos_emplacement1[a][b][0]
                             pos_b = pos_emplacement1[a][b][1]
                             carte_rect = carte.get_rect(center=(pos_a, pos_b))
                             screen.blit(carte, carte_rect)
-                            carte_rects_j1.append((carte_rect, a, b))
-            for i in range(len(BOT.liste)):
-                for a in range(2):
-                    for b in range(5):
-                        if plateauJ1[a][b] == "X":
-                            carte = pygame.image.load('assets/carte_test_R.png')
-                            pos_a = pos_emplacement2[a][b][0]
-                            pos_b = pos_emplacement2[a][b][1]
-                            carte_rect = carte.get_rect(center=(pos_a, pos_b))
-                            screen.blit(carte, carte_rect)
+                            print(J1.liste[i].nom)
+            """for carte_rect, pos_a, pos_b, i in carte_rects_j1:
+                carte = pygame.image.load('assets/carte_test_R.png')
+                screen.blit(carte, carte_rect)
+                print(J1.liste[i].nom)"""
+            for carte_rect, pos_a, pos_b, i in carte_rects_j2:
+                carte = pygame.image.load('assets/carte_test_R.png')
+                screen.blit(carte, carte_rect)
+
+            if pos_carte_selec != None:
+                pygame.font.init()
+                text = pygame.font.SysFont('Arial', 15)
+                text_surface = text.render("Propriété de la carte", False, princip_color)
+                text_surface2 = text.render("Attaque 1", False, princip_color)
+                text_surface3 = text.render("Attaque 2", False, princip_color)
+                posi_a = pos_carte_selec[0]
+                posi_b = pos_carte_selec[1]
+                text_rect = text_surface.get_rect(center=(posi_a-120, posi_b))
+                text_rect2 = text_surface2.get_rect(center=(posi_a+85, posi_b+10))
+                text_rect3 = text_surface3.get_rect(center=(posi_a+85, posi_b-10))
+                background_color = (128, 128, 128)
+                pygame.draw.rect(screen, background_color, text_rect)
+                pygame.draw.rect(screen, background_color, text_rect2)
+                pygame.draw.rect(screen, background_color, text_rect3)
+                screen.blit(text_surface, text_rect)
+                screen.blit(text_surface2, text_rect2)
+                screen.blit(text_surface3, text_rect3)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        mouse_x, mouse_y = event.pos
+                        if is_text_clicked(mouse_x, mouse_y, text_rect):
+                            prop_screen = True
+
+            if prop_screen == True:
+                voile = pygame.Surface((1728, 972))
+                voile.set_alpha(128)
+                voile.fill((0, 0, 0))
+                screen.blit(voile, (0, 0))
+                xmark = pygame.image.load('assets/xmark-solid.svg')
+                scaled_image = pygame.transform.scale(xmark, (35, 45))
+                xmark_rect = scaled_image.get_rect(topleft=(1680, 10))
+                screen.blit(scaled_image, xmark_rect)
+                text = pygame.font.SysFont('Arial', 100)
+                titre = pygame.font.SysFont('Arial', 125)
+                titre_surface = titre.render(f"{J1.liste[pos_carte_selec[2]].nom}", False, (255, 255, 255))
+                text_surface = text.render(f"Attaque 1 : {J1.liste[pos_carte_selec[2]].titre1}", False, (255, 255, 255))
+                text_surface2 = text.render(f"PV d'attaque 1 : {J1.liste[pos_carte_selec[2]].atk1}", False, (255, 255, 255))
+                titre_rect=titre_surface.get_rect(center=(860,100))
+                screen.blit(titre_surface, titre_rect)
+                text_rect2=text_surface2.get_rect(center=(860,425))
+                screen.blit(text_surface2, text_rect2)
+                text_rect=text_surface.get_rect(center=(860,325))
+                screen.blit(text_surface, text_rect)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        mouse_x, mouse_y = event.pos
+                        if is_text_clicked(mouse_x, mouse_y, xmark_rect):
+                            prop_screen = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_x, mouse_y = event.pos
-                for carte_rect, a, b in carte_rects_j1:
-                    if carte_rect.collidepoint(mouse_x, mouse_y):
-                        print(f"Carte J1 cliquée à la position : {a}, {b}")
-
-            #print(J1.liste[0].pv)
-            #print(plateauJ1)
-            #print(plateauBOT)
+                if event.button == 1:
+                    mouse_x, mouse_y = event.pos
+                    for carte_rect, a, b, i in carte_rects_j1:
+                        if carte_rect.collidepoint(mouse_x, mouse_y):
+                            pos_carte_selec = [a,b,i]
+                            print(i)
+                            break
 
         if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = event.pos
-            if is_text_clicked(mouse_x, mouse_y, home_rect):
-                global screen_type
-                screen_type = 'home'
-                startscreen = True
+            if event.button == 1:
+                mouse_x, mouse_y = event.pos
+                if is_text_clicked(mouse_x, mouse_y, home_rect):
+                    global screen_type
+                    screen_type = 'home'
+                    startscreen = True
 
     def credit() :
         pygame.font.init()
@@ -247,6 +331,13 @@ while running:
         text_rect3 = text_surface3.get_rect(center=(860, 575))
         home_rect = scaled_image.get_rect(topleft=(10, 10))
         copyrights_rect = copyrights_surface.get_rect(center=(860, 900))
+        fond = pygame.image.load('assets/credit_screen.png')
+        fond_scaled = pygame.transform.scale(fond, (1728, 972))
+        screen.blit(fond_scaled, (0, 0))
+        voile = pygame.Surface((1728, 972))
+        voile.set_alpha(70)
+        voile.fill((0, 0, 0))
+        screen.blit(voile, (0, 0))
         screen.blit(titre_surface, titre_rect)
         screen.blit(text_surface, text_rect)
         screen.blit(text_surface1, text_rect1)
@@ -255,12 +346,13 @@ while running:
         screen.blit(copyrights_surface, copyrights_rect)
         screen.blit(scaled_image, home_rect)
         if event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = event.pos
-            if is_text_clicked(mouse_x, mouse_y, home_rect):
-                print("Retour à l'écran d'acceuil")
-                global screen_type
-                screen_type = "home"
-                return
+            if event.button == 1:
+                mouse_x, mouse_y = event.pos
+                if is_text_clicked(mouse_x, mouse_y, home_rect):
+                    print("Retour à l'écran d'acceuil")
+                    global screen_type
+                    screen_type = "home"
+                    return
 
 
     if screen_type == "home" :
@@ -273,7 +365,7 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 
-    clock.tick(60)  # limits FPS to 60
+    #clock.tick(60)  # limits FPS to 60
 
 print("Merci d'avoir joué")
 pygame.quit()
