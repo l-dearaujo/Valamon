@@ -66,6 +66,9 @@ class Valamons:
     def __sub__(self, valeur):
         self.pv -= valeur
 
+    def get_pvmax(self):
+        return self.__pvmax
+
     def attaque1(self, vala, player):
         vala - self.atk1
         if self.__soincol1 == 0:
@@ -73,7 +76,7 @@ class Valamons:
                 self.pv += self.soin1
         else:
             for i in range(len(player.liste)):
-                if player.liste[i].pv + self.soin1 <= player.liste[i].pvmax:
+                if player.liste[i].pv + self.soin1 <= player.liste[i].get_pvmax():
                     player.liste[i].pv += self.soin1
 
     def attaque2(self, vala, player):
@@ -83,7 +86,7 @@ class Valamons:
                 self.pv += self.soin2
         else:
             for i in range(len(player.liste)):
-                if player.liste[i].pv + self.soin2 <= player.liste[i].pvmax:
+                if player.liste[i].pv + self.soin2 <= player.liste[i].get_pvmax():
                     player.liste[i].pv += self.soin2
 
     """def elt_check(self,vala):
@@ -264,10 +267,10 @@ while running:
                 if is_text_clicked(mouse_x, mouse_y, start_rect):
                     startscreen = False
         elif startscreen == False :
-            for carte_rect, pos_a, pos_b, i in carte_rects_j1:
+            for carte_rect, pos_a, pos_b, i, a, b in carte_rects_j1:
                 carte = pygame.image.load(f'assets/carte_{J1.liste[i].nom}.png')
                 screen.blit(carte, carte_rect)
-            for carte_rect, pos_a, pos_b, i in carte_rects_j2:
+            for carte_rect, pos_a, pos_b, i, a, b in carte_rects_j2:
                 carte = pygame.image.load(f'assets/carte_{BOT.liste[i].nom}.png')
                 screen.blit(carte, carte_rect)
 
@@ -295,12 +298,20 @@ while running:
                         if is_text_clicked(mouse_x, mouse_y, text_rect):
                             prop_screen = True
                         if is_text_clicked(mouse_x, mouse_y, text_rect2):
-                            if plateauBOT[0][pos_carte_selec[5]] == 'Y':
+                            if plateauBOT[0][pos_carte_selec[4]] == 'Y':
                                 cartead = None
-                                for el in plateauBOT:
-                                    if el[4] == 0 and el[5] == pos_carte_selec[5]:
+                                for el in carte_rects_j2:
+                                    if el[4] == 0 and el[5] == pos_carte_selec[4]:
                                         cartead = el[3]
-                                J1.liste[i].attaque1(BOT.liste[cartead])
+                                        J1.liste[i].attaque1(BOT.liste[cartead], J1)
+                                        pos_carte_selec = None
+                            elif plateauBOT[1][pos_carte_selec[4]] == 'Y':
+                                cartead = None
+                                for el in carte_rects_j2:
+                                    if el[4] == 1 and el[5] == pos_carte_selec[4]:
+                                        cartead = el[3]
+                                        J1.liste[i].attaque1(BOT.liste[cartead], J1)
+                                        pos_carte_selec = None
 
             if prop_screen == True:
                 voile = pygame.Surface((1728, 972))
