@@ -18,8 +18,11 @@ pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,6
 pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
 carte_rects_j1 = []
 carte_rects_j2 = []
+ordre_elt1 = ["Plante","Eau","Feu"]
+ordre_elt2 = ["Bonbons","Robots","Lumière"]
 pos_carte_selec = None
 prop_screen = False
+quit = False
 
 def is_text_clicked(x, y, text_rect):
     return text_rect.collidepoint(x, y)
@@ -83,6 +86,12 @@ class Valamons:
                 if player.liste[i].pv + self.soin2 <= player.liste[i].pvmax:
                     player.liste[i].pv += self.soin2
 
+    """def elt_check(self,vala):
+        global ordre_elt1
+        for i in range(2):
+            if """
+
+
 class Joueur :
     def __init__(self):
         self.liste = []
@@ -124,7 +133,7 @@ def init_pos():
                     pos_a = pos_emplacement1[a][b][0]
                     pos_b = pos_emplacement1[a][b][1]
                     carte_rect = carte.get_rect(center=(pos_a, pos_b))
-                    carte_rects_j1.append([carte_rect, pos_a, pos_b, i])
+                    carte_rects_j1.append([carte_rect, pos_a, pos_b, i, a, b])
                     plateauJ1[a][b]="Y"
                     placed = True
     for i in range(len(BOT.liste)):
@@ -138,7 +147,7 @@ def init_pos():
                     pos_a = pos_emplacement2[a][b][0]
                     pos_b = pos_emplacement2[a][b][1]
                     carte_rect = carte.get_rect(center=(pos_a, pos_b))
-                    carte_rects_j2.append([carte_rect, pos_a, pos_b, i])
+                    carte_rects_j2.append([carte_rect, pos_a, pos_b, i, a, b])
                     plateauBOT[a][b]="Y"
                     placed = True
 
@@ -157,12 +166,13 @@ while running:
 
     def home_screen() :
         global pos_carte_selec
+        global quit
         pos_carte_selec = None
         titre = pygame.font.SysFont('Arial', 150)
         titre_surface = titre.render("Valamons", False, princip_color)
         text = pygame.font.SysFont('Arial', 75)
         text_surface = text.render("-> Jouer Solo", False, princip_color)
-        text_surface1 = text.render("-> Jouer en Multijoueur (Indisponible)", False, princip_color)
+        text_surface1 = text.render("-> Règles du jeu", False, princip_color)
         text_surface2 = text.render("-> Crédits", False, princip_color)
         text_surface3 = text.render("-> Quitter", False, princip_color)
         fond = pygame.image.load('assets/home_screen.png')
@@ -182,12 +192,40 @@ while running:
         screen.blit(text_surface1, text_rect1)
         screen.blit(text_surface2, text_rect2)
         screen.blit(text_surface3, text_rect3)
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if quit :
+            voile = pygame.Surface((600, 300))
+            voile.set_alpha(200)
+            voile.fill((0, 0, 0))
+            voile_rect = voile.get_rect(center=(864, 450))
+            screen.blit(voile, voile_rect.topleft)
+            quit_surface = pygame.image.load('assets/bob.png')
+            quit_scaled = pygame.transform.scale(quit_surface, (304, 179))
+            quit_rect = quit_scaled.get_rect(center=(864,386))
+            screen.blit(quit_scaled,quit_rect)
+            titre = pygame.font.SysFont('Arial', 50)
+            titre_surface = titre.render("Es-tu sûr de vouloir quitter ?", False, princip_color)
+            text = pygame.font.SysFont('Arial', 25)
+            text_surface = text.render("Oui", False, princip_color)
+            text_surface1 = text.render("Non", False, princip_color)
+            titre_rect = titre_surface.get_rect(center=(860, 525))
+            text_rect = text_surface.get_rect(topleft=(770,555))
+            text_rect1 = text_surface1.get_rect(topleft=(870,555))
+            screen.blit(titre_surface, titre_rect)
+            screen.blit(text_surface, text_rect)
+            screen.blit(text_surface1, text_rect1)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mouse_x, mouse_y = event.pos
+                    if is_text_clicked(mouse_x, mouse_y, text_rect1):
+                        quit = False
+                    if is_text_clicked(mouse_x, mouse_y, text_rect):
+                        global running
+                        running = False
+        if event.type == pygame.MOUSEBUTTONDOWN and not quit:
             if event.button == 1:
                 mouse_x, mouse_y = event.pos
                 if is_text_clicked(mouse_x, mouse_y, text_rect3):
-                    global running
-                    running = False
+                    quit = True
                 if is_text_clicked(mouse_x, mouse_y, text_rect):
                     print("Passage en mode Solo")
                     global screen_type
@@ -256,6 +294,13 @@ while running:
                         mouse_x, mouse_y = event.pos
                         if is_text_clicked(mouse_x, mouse_y, text_rect):
                             prop_screen = True
+                        if is_text_clicked(mouse_x, mouse_y, text_rect2):
+                            if plateauBOT[0][pos_carte_selec[5]] == 'Y':
+                                cartead = None
+                                for el in plateauBOT:
+                                    if el[4] == 0 and el[5] == pos_carte_selec[5]:
+                                        cartead = el[3]
+                                J1.liste[i].attaque1(BOT.liste[cartead])
 
             if prop_screen == True:
                 voile = pygame.Surface((1728, 972))
@@ -295,9 +340,9 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_x, mouse_y = event.pos
-                    for carte_rect, a, b, i in carte_rects_j1:
+                    for carte_rect, posa, posb, i, a,b in carte_rects_j1:
                         if carte_rect.collidepoint(mouse_x, mouse_y):
-                            pos_carte_selec = [a,b,i]
+                            pos_carte_selec = [posa,posb,i, a, b]
                             break
 
         if event.type == pygame.MOUSEBUTTONDOWN:
