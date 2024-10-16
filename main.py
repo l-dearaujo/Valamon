@@ -1,6 +1,7 @@
 import pygame
 import csv
 import random
+import webbrowser
 
 from pygame.display import toggle_fullscreen
 
@@ -170,7 +171,6 @@ while running:
     def home_screen() :
         global pos_carte_selec
         global quit
-        pos_carte_selec = None
         titre = pygame.font.SysFont('Arial', 150)
         titre_surface = titre.render("Valamons", False, princip_color)
         text = pygame.font.SysFont('Arial', 75)
@@ -239,6 +239,8 @@ while running:
                     print("Passage sur les crédits")
                     screen_type = "credit"
                     return
+                if is_text_clicked(mouse_x,mouse_y,text_rect1):
+                    webbrowser.open('https://github.com/Energielulu83852/Valamons/wiki/Rules')
 
     def solo() :
         global carte_rects_j1
@@ -269,23 +271,35 @@ while running:
         elif startscreen == False :
             for carte_rect, pos_a, pos_b, i, a, b in carte_rects_j1:
                 carte = pygame.image.load(f'assets/carte_{J1.liste[i].nom}.png')
+                pv = J1.liste[i].pv
+                img_pv = pygame.image.load(f'assets/chiffre_{pv}.png')
+                img_pv_rect = img_pv.get_rect(center=(pos_a+20, pos_b+55))
                 screen.blit(carte, carte_rect)
+                screen.blit(img_pv, img_pv_rect)
             for carte_rect, pos_a, pos_b, i, a, b in carte_rects_j2:
                 carte = pygame.image.load(f'assets/carte_{BOT.liste[i].nom}.png')
+                pv = BOT.liste[i].pv
+                img_pv = pygame.image.load(f'assets/chiffre_{pv}.png')
+                img_pv_rect = img_pv.get_rect(center=(pos_a+20, pos_b+55))
                 screen.blit(carte, carte_rect)
+                screen.blit(img_pv, img_pv_rect)
 
             if pos_carte_selec != None:
                 pygame.font.init()
-                text = pygame.font.SysFont('Arial', 15)
+                text = pygame.font.SysFont('Arial', 30)
                 text_surface = text.render("Propriété de la carte", False, princip_color)
                 text_surface2 = text.render("Attaque 1", False, princip_color)
                 text_surface3 = text.render("Attaque 2", False, princip_color)
                 posi_a = pos_carte_selec[0]
                 posi_b = pos_carte_selec[1]
-                text_rect = text_surface.get_rect(center=(posi_a-120, posi_b))
-                text_rect2 = text_surface2.get_rect(center=(posi_a+85, posi_b+10))
-                text_rect3 = text_surface3.get_rect(center=(posi_a+85, posi_b-10))
+                text_rect = text_surface.get_rect(center=(401, 525))
+                text_rect2 = text_surface2.get_rect(center=(401, 570))
+                text_rect3 = text_surface3.get_rect(center=(401, 620))
                 background_color = (128, 128, 128)
+                voile = pygame.Surface((125, 165))
+                voile.set_alpha(64)
+                voile.fill((255, 255, 153))
+                screen.blit(voile, (posi_a-65, posi_b-80))
                 pygame.draw.rect(screen, background_color, text_rect)
                 pygame.draw.rect(screen, background_color, text_rect2)
                 pygame.draw.rect(screen, background_color, text_rect3)
@@ -299,20 +313,26 @@ while running:
                             prop_screen = True
                         if is_text_clicked(mouse_x, mouse_y, text_rect2):
                             if plateauBOT[0][pos_carte_selec[4]] == 'Y':
-                                cartead = None
                                 for el in carte_rects_j2:
                                     if el[4] == 0 and el[5] == pos_carte_selec[4]:
                                         cartead = el[3]
                                         J1.liste[i].attaque1(BOT.liste[cartead], J1)
-                                        pos_carte_selec = None
                             elif plateauBOT[1][pos_carte_selec[4]] == 'Y':
-                                cartead = None
                                 for el in carte_rects_j2:
                                     if el[4] == 1 and el[5] == pos_carte_selec[4]:
                                         cartead = el[3]
                                         J1.liste[i].attaque1(BOT.liste[cartead], J1)
-                                        pos_carte_selec = None
-
+                        if is_text_clicked(mouse_x, mouse_y, text_rect3):
+                            if plateauBOT[0][pos_carte_selec[4]] == 'Y':
+                                for el in carte_rects_j2:
+                                    if el[4] == 0 and el[5] == pos_carte_selec[4]:
+                                        cartead = el[3]
+                                        J1.liste[i].attaque2(BOT.liste[cartead], J1)
+                            elif plateauBOT[1][pos_carte_selec[4]] == 'Y':
+                                for el in carte_rects_j2:
+                                    if el[4] == 1 and el[5] == pos_carte_selec[4]:
+                                        cartead = el[3]
+                                        J1.liste[i].attaque2(BOT.liste[cartead], J1)
             if prop_screen == True:
                 voile = pygame.Surface((1728, 972))
                 voile.set_alpha(128)
@@ -326,6 +346,11 @@ while running:
                 titre = pygame.font.SysFont('Arial', 125)
                 titre_surface = titre.render(f"{J1.liste[pos_carte_selec[2]].nom}", False, (255, 255, 255))
                 text_surface5 = text.render(f"Élément 1 : {J1.liste[pos_carte_selec[2]].elt1}", False, (255, 255, 255))
+                elt2 = J1.liste[pos_carte_selec[2]].elt2
+                if elt2 == 'None':
+                    text_surface6 = text.render(f"Élément 2 : Aucun", False, (255, 255, 255))
+                else:
+                    text_surface6 = text.render(f"Élément 2 : {J1.liste[pos_carte_selec[2]].elt2}", False,(255, 255, 255))
                 text_surface = text.render(f"Attaque 1 : {J1.liste[pos_carte_selec[2]].titre1}", False, (255, 255, 255))
                 text_surface2 = text.render(f"PV d'attaque 1 : {J1.liste[pos_carte_selec[2]].atk1} (Soin : {J1.liste[pos_carte_selec[2]].soin1})", False, (255, 255, 255))
                 text_surface3 = text.render(f"Attaque 2 : {J1.liste[pos_carte_selec[2]].titre2}", False, (255, 255, 255))
@@ -340,7 +365,9 @@ while running:
                 screen.blit(text_surface3, text_rect3)
                 text_rect4=text_surface4.get_rect(center=(860,805))
                 screen.blit(text_surface4, text_rect4)
-                text_rect5=text_surface5.get_rect(center=(860,325))
+                text_rect6=text_surface6.get_rect(center=(860,325))
+                screen.blit(text_surface6, text_rect6)
+                text_rect5=text_surface5.get_rect(center=(860,225))
                 screen.blit(text_surface5, text_rect5)
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
@@ -351,7 +378,7 @@ while running:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     mouse_x, mouse_y = event.pos
-                    for carte_rect, posa, posb, i, a,b in carte_rects_j1:
+                    for carte_rect, posa, posb, i, a, b in carte_rects_j1:
                         if carte_rect.collidepoint(mouse_x, mouse_y):
                             pos_carte_selec = [posa,posb,i, a, b]
                             break
