@@ -8,7 +8,7 @@ from pygame.display import toggle_fullscreen
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode((1728, 972), pygame.SCALED)
-title = pygame.display.set_caption(title="Valamons", icontitle="None")
+title = pygame.display.set_caption(title="Valamon", icontitle="None")
 clock = pygame.time.Clock()
 pygame.font.init()
 running = True
@@ -48,7 +48,7 @@ def pos_cartes():
             compteur_x+=1
     return m
 
-class Valamons:
+class Valamon:
     def __init__(self, nom, pv, pvmax, atk1, atk2, soin1, soin2, soincol1, soincol2, elt1, elt2, titreatk1, titreatk2):
         self.nom = nom
         self.pv = pv
@@ -69,8 +69,10 @@ class Valamons:
 
     def get_pvmax(self):
         return self.__pvmax
+    def get_pv(self):
+        return self.pv
 
-    def attaque1(self, vala, player):
+    def attaque1(self, vala, player, player2, pos):
         vala - self.atk1
         if self.__soincol1 == 0:
             if not self.pv + self.soin1 > self.__pvmax:
@@ -79,6 +81,21 @@ class Valamons:
             for i in range(len(player.liste)):
                 if player.liste[i].pv + self.soin1 <= player.liste[i].get_pvmax():
                     player.liste[i].pv += self.soin1
+        if vala.get_pv() <= 0:
+            if player2.nom == "BOT":
+                print(pos)
+                player2.liste.pop(pos)
+                carte_rects_j2.pop(pos)
+                while pos != len(player2.liste):
+                    carte_rects_j2[pos][3] = pos - 1
+                    pos += 1
+            else :
+                player2.liste.pop(pos)
+                carte_rects_j1.pop(pos)
+                while pos != len(player2.liste):
+                    carte_rects_j1[pos][3] = pos - 1
+                    pos += 1
+
 
     def attaque2(self, vala, player):
         vala - self.atk2
@@ -97,29 +114,53 @@ class Valamons:
 
 
 class Joueur :
-    def __init__(self):
+    def __init__(self,nom):
         self.liste = []
-        for i in range(8):
+        self.nom = nom
+        while len(self.liste) != 7:
             ran = random.randint(0, 20)
-            self.liste.append(valamonslist[ran])
-    def possecarte(self, vala, position):
-        valaimage = pygame.image.load(f'assets/{vala}.png')
-        screen.blit(valaimage, position)
+            compteur = 0
+            for i in range(len(self.liste)):
+                if self.liste[i] == valamonlist[ran]:
+                    compteur += 1
+            if compteur == 0:
+                self.liste.append(valamonlist[ran])
+        for i in range(len(self.liste)):
+            print(self.liste[i].nom)
+        print('J1')
 
+class Bot:
+    def __init__(self,nom):
+        self.liste = []
+        self.nom = nom
+        while len(self.liste) != 7:
+            ran = random.randint(0, 20)
+            compteur = 0
+            for i in range(len(self.liste)):
+                if self.liste[i] == valamonlist[ran]:
+                    compteur += 1
+            for i in range(len(J1.liste)):
+                if J1.liste[i] == valamonlist[ran]:
+                    compteur += 1
+            if compteur == 0:
+                self.liste.append(valamonlist[ran])
+        for i in range(len(self.liste)):
+            print(self.liste[i].nom)
+        print('BOT')
 
-valamons = read_csv_to_list('assets/valamons.csv')
-valamonsl = [element for element in valamons]
-valamonslist = []
+valamon = read_csv_to_list('assets/valamon.csv')
+valamonl = [element for element in valamon]
+valamonlist = []
 
-for i in range(len(valamonsl)):
-    valamonsl[i][0] = valamonsl[i][0].strip('"')
-    valamonsl[i][0] = Valamons(valamonsl[i][0], int(valamonsl[i][1]), int(valamonsl[i][2]), int(valamonsl[i][3]),
-                               int(valamonsl[i][4]), int(valamonsl[i][5]), int(valamonsl[i][6]), int(valamonsl[i][7]),
-                               int(valamonsl[i][8]), valamonsl[i][9], valamonsl[i][10], valamonsl[i][11], valamonsl[i][12])
-    valamonslist.append(valamonsl[i][0])
+for i in range(len(valamonl)):
+    valamonl[i][0] = valamonl[i][0].strip('"')
+    valamonl[i][0] = Valamon(valamonl[i][0], int(valamonl[i][1]), int(valamonl[i][2]), int(valamonl[i][3]),
+                               int(valamonl[i][4]), int(valamonl[i][5]), int(valamonl[i][6]), int(valamonl[i][7]),
+                               int(valamonl[i][8]), valamonl[i][9], valamonl[i][10], valamonl[i][11], valamonl[i][12])
+    valamonlist.append(valamonl[i][0])
 
-J1 = Joueur()
-BOT = Joueur()
+J1 = Joueur("J1")
+BOT = Bot("BOT")
 plateauJ1 = pos_cartes()
 plateauBOT = pos_cartes()
 
@@ -172,7 +213,7 @@ while running:
         global pos_carte_selec
         global quit
         titre = pygame.font.SysFont('Arial', 150)
-        titre_surface = titre.render("Valamons", False, princip_color)
+        titre_surface = titre.render("Valamon", False, princip_color)
         text = pygame.font.SysFont('Arial', 75)
         text_surface = text.render("-> Jouer Solo", False, princip_color)
         text_surface1 = text.render("-> Règles du jeu", False, princip_color)
@@ -240,7 +281,7 @@ while running:
                     screen_type = "credit"
                     return
                 if is_text_clicked(mouse_x,mouse_y,text_rect1):
-                    webbrowser.open('https://github.com/Energielulu83852/Valamons/wiki/Rules')
+                    webbrowser.open('https://github.com/Energielulu83852/Valamon/wiki/Rules')
 
     def solo() :
         global carte_rects_j1
@@ -307,32 +348,33 @@ while running:
                 screen.blit(text_surface2, text_rect2)
                 screen.blit(text_surface3, text_rect3)
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        mouse_x, mouse_y = event.pos
-                        if is_text_clicked(mouse_x, mouse_y, text_rect):
-                            prop_screen = True
-                        if is_text_clicked(mouse_x, mouse_y, text_rect2):
-                            if plateauBOT[0][pos_carte_selec[4]] == 'Y':
-                                for el in carte_rects_j2:
-                                    if el[4] == 0 and el[5] == pos_carte_selec[4]:
-                                        cartead = el[3]
-                                        J1.liste[i].attaque1(BOT.liste[cartead], J1)
-                            elif plateauBOT[1][pos_carte_selec[4]] == 'Y':
-                                for el in carte_rects_j2:
-                                    if el[4] == 1 and el[5] == pos_carte_selec[4]:
-                                        cartead = el[3]
-                                        J1.liste[i].attaque1(BOT.liste[cartead], J1)
-                        if is_text_clicked(mouse_x, mouse_y, text_rect3):
-                            if plateauBOT[0][pos_carte_selec[4]] == 'Y':
-                                for el in carte_rects_j2:
-                                    if el[4] == 0 and el[5] == pos_carte_selec[4]:
-                                        cartead = el[3]
-                                        J1.liste[i].attaque2(BOT.liste[cartead], J1)
-                            elif plateauBOT[1][pos_carte_selec[4]] == 'Y':
-                                for el in carte_rects_j2:
-                                    if el[4] == 1 and el[5] == pos_carte_selec[4]:
-                                        cartead = el[3]
-                                        J1.liste[i].attaque2(BOT.liste[cartead], J1)
+                    mouse_x, mouse_y = event.pos
+                    if is_text_clicked(mouse_x, mouse_y, text_rect):
+                        prop_screen = True
+                    if is_text_clicked(mouse_x, mouse_y, text_rect2):
+                        if plateauBOT[1][pos_carte_selec[4]] == 'Y':
+                            for e in range(len(carte_rects_j2)):
+                                if e < len(carte_rects_j2):
+                                    if carte_rects_j2[e][4] == 1 and carte_rects_j2[e][5] == pos_carte_selec[4]:
+                                        cartead = carte_rects_j2[e][3]
+                                        J1.liste[pos_carte_selec[3]].attaque1(BOT.liste[cartead], J1, BOT, carte_rects_j2[e][3])
+                        elif plateauBOT[0][pos_carte_selec[4]] == 'Y':
+                            for e in range(len(carte_rects_j2)):
+                                if e < len(carte_rects_j2):
+                                    if carte_rects_j2[e][4] == 0 and carte_rects_j2[e][5] == pos_carte_selec[4]:
+                                        cartead = carte_rects_j2[e][3]
+                                        J1.liste[pos_carte_selec[3]].attaque1(BOT.liste[cartead], J1, BOT, carte_rects_j2[e][3])
+                    if is_text_clicked(mouse_x, mouse_y, text_rect3):
+                        if plateauBOT[1][pos_carte_selec[4]] == 'Y':
+                            for el in carte_rects_j2:
+                                if el[4] == 1 and el[5] == pos_carte_selec[4]:
+                                    cartead = el[3]
+                                    J1.liste[i].attaque2(BOT.liste[cartead], J1, BOT, i)
+                        elif plateauBOT[0][pos_carte_selec[4]] == 'Y':
+                            for el in carte_rects_j2:
+                                if el[4] == 0 and el[5] == pos_carte_selec[4]:
+                                    cartead = el[3]
+                                    J1.liste[i].attaque2(BOT.liste[cartead], J1, BOT, i)
             if prop_screen == True:
                 voile = pygame.Surface((1728, 972))
                 voile.set_alpha(128)
@@ -398,7 +440,7 @@ while running:
         titre = pygame.font.SysFont('Arial', 150)
         text = pygame.font.SysFont('Arial', 75)
         copyrights = pygame.font.SysFont('Arial', 50)
-        titre_surface = titre.render("Valamons", False, princip_color)
+        titre_surface = titre.render("Valamon", False, princip_color)
         text_surface = text.render("Designer Graphique : Raphael Robin", False, princip_color)
         text_surface1 = text.render("Développeurs : Lucas De Araujo, Robin Calcar,", False, princip_color)
         text_surface3 = text.render("Raphael Robin et Emma Joulin", False, princip_color)
