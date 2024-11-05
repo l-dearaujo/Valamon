@@ -2,7 +2,7 @@ Bob;15;15;3;1;1;0;0;0;Plante;Vide;Coup de tete;Encouragement;Se soigne 1 pv en p
 ArbreJomo;15;15;1;3;0;0;0;0;Plante;Vide;Boost ;Racine;Augmente les degats d'equipe de 1 pnd 3 tours;40% de chance de double degats
 PlanteCarnivore;15;15;3;3;3;0;0;0;Plante;Vide;Morsure;Piege;Vole 3 pv au monstre touche;Pendant 2 tours chaque ennemi le touchant perd 2 pv
 Jerry;10;10;5;3;0;1;0;0;Eau;Vide;Ruee;PluieViolente;50% de chance de reussite;30% de chance de passer le tour ennemi
-Duck;20;20;5;1;-10;0;0;0;Eau;Vide;Sacrifice;RegardMalefique;Sacrifie 10 pv;Reduction de 1 les degats attaques adverses pour l'equipe jusqu’a mort du monstre
+Duck;20;20;5;1;0;0;0;0;Eau;Vide;Sacrifice;RegardMalefique;Sacrifie 10 pv;Reduction de 1 les degats attaques adverses pour l'equipe jusqu’a mort du monstre
 Blue;10;10;1;2;1;3;0;0;Eau;Vide;Parade;Incantation;Invoque un bouclier pour les allies, 60% de chance de renvoyer la prochaine attaque  ;Frappe un ennemi et soigne de 3 soi-meme
 RonaldMcdonald;15;15;1;3;3;0;0;0;Feu;Vide;Burger;CremeGlacee;Change de place avec un autre monstre aleatoirement;L'ennemi touche fait -50% de degats pendant 2 tours
 Cerbere;15;15;1;3;0;0;1;0;Feu;Vide;Aboiements;Griffure;Ennemi touche rate ses attaque de 60%;40% de chance d'en faire à tous les ennemis
@@ -10,12 +10,12 @@ Dealer;11;11;10;2;0;0;0;0;Feu;Vide;PileOuFace;Contre;50% de se toucher soi-meme 
 Guimov;15;15;1;3;1;0;1;0;Bonbons;Vide;PetitSnack;BonbonPerime;Soigne toute l'equipe et le joueur 1 pv chaque tour pendant 3 tours;Touche tous les ennemis de la colonne en face de l'attaquant
 Pancek;15;15;1;1;1;0;1;0;Bonbons;Vide;Sucreries;QuatreHeures;Touche tous les ennemis,s'approprie 1 pv par ennemi touche;Le joueur gagne +3 pv
 Teddy;20;20;2;1;0;1;0;1;Bonbons;Vide;BonbonCollant;Partage;Tous les allies touchant le monstre qui a recu l'attaque se soignent 1 pv par degats infliges pendant 2 tours;Se sacrifie 10 pv et soigne toute son quipe sauf le joueur et lui-meme 2 pv
-Ange;20;20;1;2;0;-1;0;0;Lumiere;Vide;Soins;Etourdissement;Soin 5 pv un allie au choix;soin -1 + 30% de chance de paralyser  monstre ennemi
+Ange;20;20;1;2;0;0;0;0;Lumiere;Vide;Soins;Etourdissement;Soin 5 pv un allie au choix;soin -1 + 30% de chance de paralyser  monstre ennemi
 HarryPosteur;10;10;1;2;6;0;0;0;Lumiere;Vide;Surpuissancios;AvadaKedavra;Se soigne 6 pv;Touche tous les ennemis de la ligne du monstre touche
 DonaldKrump;10;10;1;5;0;0;0;0;Lumiere;Vide;GrandMur;Headshot;Protection, Fait apparaitre Mur de 10 pv qui protege tous les allies;70% de chance de rater
 Lunar;1;1;1;1;0;0;0;0;Robot ;Vide;Armure;TirCharge;Chaque attaque qui le touche a 85% de chance de rater pendant 3 tours;Boost les degats d'un allie de 3 pendant 1 tour
-Glitch;13;13;4;3;0;13;0;0;Robot;Vide;Piratage;/shutdown;Reduction pv et pv max d'un monstre adverse de 4;Autodestruction, touche tous les monstres ennemis
-Mr.Henry;20;20;3;8;0;20;0;0;Robot ;Vide;Hacks;Ragequit;Touche tous les ennemis adjacents (dans un carre autour);Quitte le champ de bataille mais fait beaucoup de degats
+Glitch;13;13;4;3;0;0;0;0;Robot;Vide;Piratage;/shutdown;Reduction pv et pv max d'un monstre adverse de 4;Autodestruction, touche tous les monstres ennemis
+Mr.Henry;20;20;3;8;0;0;0;0;Robot ;Vide;Hacks;Ragequit;Touche tous les ennemis adjacents (dans un carre autour);Quitte le champ de bataille mais fait beaucoup de degats
 Misu;12;12;3;1;0;2;0;0;Eau;Bonbons;Bulles;BarbeAPapa;Touche le monstre de son choix directement;Se soigne 2 pv chaque tour pendant 3 tours
 Rusty;13;13;1;3;0;0;0;0;Feu;Robot;Pare-Feu;Fonte;Bouclier de 5 pv qui est immunise aux attaques feu, faible aux attaques eau;1 pv en moins pour 1 ennemi chaque tour pendant 3 tours en plus des dgt
 Troncslucide;12;12;2;1;1;1;0;0;Plante;Lumiere;Photosynthese;Engrais;Confusion, Monstre touche attaque un allie au hasard;Se protege 100% des attaques pendant 1 tour

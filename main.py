@@ -19,8 +19,7 @@ pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,6
 pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
 carte_rects_j1 = []
 carte_rects_j2 = []
-ordre_elt1 = ["Plante","Eau","Feu"]
-ordre_elt2 = ["Bonbons","Robots","Lumière"]
+ordre_elt = {"Plante":"Eau","Eau":"Feu","Feu":"Plante","Bonbons":"Robots","Robots":"Lumière","Lumière":"Bonbons"}
 pos_carte_selec = None
 prop_screen = False
 quit = False
@@ -72,8 +71,19 @@ class Valamon:
     def get_pv(self):
         return self.pv
 
+    def elt_check(self,vala):
+        global ordre_elt
+        if self.elt2 != 'Vide' or vala.elt2 != 'Vide':
+            if ordre_elt[self.elt2] == vala.elt2:
+                return 2
+        if ordre_elt[self.elt1] == vala.elt1 :
+            return 2
+        else:
+            return 0
+
     def attaque1(self, vala, player, player2, pos):
-        vala - self.atk1
+        a = self.elt_check(vala)
+        vala - (self.atk1 + a)
         if self.__soincol1 == 0:
             if not self.pv + self.soin1 > self.__pvmax:
                 self.pv += self.soin1
@@ -83,22 +93,20 @@ class Valamon:
                     player.liste[i].pv += self.soin1
         if vala.get_pv() <= 0:
             if player2.nom == "BOT":
-                print(pos)
                 player2.liste.pop(pos)
                 carte_rects_j2.pop(pos)
-                while pos != len(player2.liste):
-                    carte_rects_j2[pos][3] = pos - 1
-                    pos += 1
+                for i in range(pos, len(player2.liste)):
+                    carte_rects_j2[i][3] = i
             else :
                 player2.liste.pop(pos)
                 carte_rects_j1.pop(pos)
-                while pos != len(player2.liste):
-                    carte_rects_j1[pos][3] = pos - 1
-                    pos += 1
+                for i in range(pos, len(player2.liste)):
+                    carte_rects_j1[i][3] = i
 
 
-    def attaque2(self, vala, player):
-        vala - self.atk2
+    def attaque2(self, vala, player, player2, pos):
+        a = self.elt_check(vala)
+        vala - (self.atk2 + a)
         if self.__soincol2 == 0:
             if not self.pv + self.soin2 > self.__pvmax:
                 self.pv += self.soin2
@@ -106,11 +114,17 @@ class Valamon:
             for i in range(len(player.liste)):
                 if player.liste[i].pv + self.soin2 <= player.liste[i].get_pvmax():
                     player.liste[i].pv += self.soin2
-
-    """def elt_check(self,vala):
-        global ordre_elt1
-        for i in range(2):
-            if """
+        if vala.get_pv() <= 0:
+            if player2.nom == "BOT":
+                player2.liste.pop(pos)
+                carte_rects_j2.pop(pos)
+                for i in range(pos, len(player2.liste)):
+                    carte_rects_j2[i][3] = i
+            else :
+                player2.liste.pop(pos)
+                carte_rects_j1.pop(pos)
+                for i in range(pos, len(player2.liste)):
+                    carte_rects_j1[i][3] = i
 
 
 class Joueur :
@@ -366,15 +380,17 @@ while running:
                                         J1.liste[pos_carte_selec[3]].attaque1(BOT.liste[cartead], J1, BOT, carte_rects_j2[e][3])
                     if is_text_clicked(mouse_x, mouse_y, text_rect3):
                         if plateauBOT[1][pos_carte_selec[4]] == 'Y':
-                            for el in carte_rects_j2:
-                                if el[4] == 1 and el[5] == pos_carte_selec[4]:
-                                    cartead = el[3]
-                                    J1.liste[i].attaque2(BOT.liste[cartead], J1, BOT, i)
+                            for e in range(len(carte_rects_j2)):
+                                if e < len(carte_rects_j2):
+                                    if carte_rects_j2[e][4] == 1 and carte_rects_j2[e][5] == pos_carte_selec[4]:
+                                        cartead = carte_rects_j2[e][3]
+                                        J1.liste[pos_carte_selec[3]].attaque2(BOT.liste[cartead], J1, BOT,carte_rects_j2[e][3])
                         elif plateauBOT[0][pos_carte_selec[4]] == 'Y':
-                            for el in carte_rects_j2:
-                                if el[4] == 0 and el[5] == pos_carte_selec[4]:
-                                    cartead = el[3]
-                                    J1.liste[i].attaque2(BOT.liste[cartead], J1, BOT, i)
+                            for e in range(len(carte_rects_j2)):
+                                if e < len(carte_rects_j2):
+                                    if carte_rects_j2[e][4] == 0 and carte_rects_j2[e][5] == pos_carte_selec[4]:
+                                        cartead = carte_rects_j2[e][3]
+                                        J1.liste[pos_carte_selec[3]].attaque2(BOT.liste[cartead], J1, BOT,carte_rects_j2[e][3])
             if prop_screen == True:
                 voile = pygame.Surface((1728, 972))
                 voile.set_alpha(128)
