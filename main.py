@@ -19,7 +19,7 @@ pos_emplacement1 = [[[602,506],[732,506],[862,506],[992,506],[1122,506]],[[602,6
 pos_emplacement2 = [[[602,130],[732,130],[862,130],[992,130],[1122,130]],[[602,296],[732,296],[862,296],[992,296],[1122,296]]]
 carte_rects_j1 = []
 carte_rects_j2 = []
-ordre_elt = {"Plante":"Eau","Eau":"Feu","Feu":"Plante","Bonbons":"Robots","Robots":"Lumière","Lumière":"Bonbons"}
+ordre_elt = {"Plante":"Eau","Eau":"Feu","Feu":"Plante","Bonbons":"Robot","Robot":"Lumiere","Lumiere":"Bonbons",'Vide':'Vide'}
 pos_carte_selec = None
 prop_screen = False
 quit = False
@@ -372,6 +372,11 @@ while running:
                                     if carte_rects_j2[e][4] == 1 and carte_rects_j2[e][5] == pos_carte_selec[4]:
                                         cartead = carte_rects_j2[e][3]
                                         J1.liste[pos_carte_selec[3]].attaque1(BOT.liste[cartead], J1, BOT, carte_rects_j2[e][3])
+                                        ran = random.randint(1,2)
+                                        if ran == 1:
+                                            BOT.liste[cartead].attaque1(J1.liste[pos_carte_selec[3]],BOT,J1,pos_carte_selec[3])
+                                        else:
+                                            BOT.liste[cartead].attaque2(J1.liste[pos_carte_selec[3]], BOT, J1, pos_carte_selec[3])
                         elif plateauBOT[0][pos_carte_selec[4]] == 'Y':
                             for e in range(len(carte_rects_j2)):
                                 if e < len(carte_rects_j2):
