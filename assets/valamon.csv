@@ -13,9 +13,9 @@ Teddy;20;20;2;1;0;1;0;1;Bonbons;Vide;BonbonCollant;Partage;Tous les allies touch
 Ange;20;20;1;2;0;0;0;0;Lumiere;Vide;Soins;Etourdissement;Soin 5 pv un allie au choix;soin -1 + 30% de chance de paralyser  monstre ennemi
 HarryPosteur;10;10;1;2;6;0;0;0;Lumiere;Vide;Surpuissancios;AvadaKedavra;Se soigne 6 pv;Touche tous les ennemis de la ligne du monstre touche
 DonaldKrump;10;10;1;5;0;0;0;0;Lumiere;Vide;GrandMur;Headshot;Protection, Fait apparaitre Mur de 10 pv qui protege tous les allies;70% de chance de rater
-Lunar;1;1;1;1;0;0;0;0;Robot ;Vide;Armure;TirCharge;Chaque attaque qui le touche a 85% de chance de rater pendant 3 tours;Boost les degats d'un allie de 3 pendant 1 tour
+Lunar;1;1;1;1;0;0;0;0;Robot;Vide;Armure;TirCharge;Chaque attaque qui le touche a 85% de chance de rater pendant 3 tours;Boost les degats d'un allie de 3 pendant 1 tour
 Glitch;13;13;4;3;0;0;0;0;Robot;Vide;Piratage;/shutdown;Reduction pv et pv max d'un monstre adverse de 4;Autodestruction, touche tous les monstres ennemis
-Mr.Henry;20;20;3;8;0;0;0;0;Robot ;Vide;Hacks;Ragequit;Touche tous les ennemis adjacents (dans un carre autour);Quitte le champ de bataille mais fait beaucoup de degats
+Mr.Henry;20;20;3;8;0;0;0;0;Robot;Vide;Hacks;Ragequit;Touche tous les ennemis adjacents (dans un carre autour);Quitte le champ de bataille mais fait beaucoup de degats
 Misu;12;12;3;1;0;2;0;0;Eau;Bonbons;Bulles;BarbeAPapa;Touche le monstre de son choix directement;Se soigne 2 pv chaque tour pendant 3 tours
 Rusty;13;13;1;3;0;0;0;0;Feu;Robot;Pare-Feu;Fonte;Bouclier de 5 pv qui est immunise aux attaques feu, faible aux attaques eau;1 pv en moins pour 1 ennemi chaque tour pendant 3 tours en plus des dgt
 Troncslucide;12;12;2;1;1;1;0;0;Plante;Lumiere;Photosynthese;Engrais;Confusion, Monstre touche attaque un allie au hasard;Se protege 100% des attaques pendant 1 tour
