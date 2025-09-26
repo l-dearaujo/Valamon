@@ -17,3 +17,12 @@ Valamon est un jeu de cartes inspiré de l'univers Pokémon. Il se joue sur un p
 
 ## Installation
 Pour installer le jeu, il suffit de télécharger l'archive et d'éxecuter le fichier main.py ou run.bat (pour ceux sur Windows). Verifiez avant de posséder les librairies requises pour pouvoir le lancer, pour cela, lancez la commande suivante `pip install -r requierements.txt` dans un terminal.
+
+## Captures d'écrans
+<img width="1073" height="604" alt="image" src="https://github.com/user-attachments/assets/a6f5185e-730a-49ec-9f92-92b70e7d8d57" />
+<img width="2559" height="1439" alt="image" src="https://github.com/user-attachments/assets/a925ad71-9a03-49c2-b15a-784185b84d54" />
+
+---
+
+## Contributeurs
+Un grand merci à toute l'équipe de programmation, de design et de développement du projet : <a href = "https://github.com/blue963dragon">Emma Joulin</a>, <a href = "https://github.com/Rob1Clam">Robin Calcar</a> et <a href="https://github.com/Hapsool">Raphaël Robin</a>.
